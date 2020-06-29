@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Battleship.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,19 @@ namespace Battleship.Controllers
                 Player1Board = new Board(20, 20),
                 Player2Board = new Board(20, 20)
             };
-            return View();
+            return View(game);
         }
         public IActionResult PlaceShip()
         {
             return View();
+        }
+        public IActionResult CreatePlayer()
+        {
+            Player player = new Player()
+            {
+                IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier)
+            };
+            return View(player);
         }
     }
 }
