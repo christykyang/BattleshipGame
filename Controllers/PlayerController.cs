@@ -9,8 +9,7 @@ namespace Battleship.Controllers
 {
     public class PlayerController : Controller
     {
-        public string[][] boardOne;
-        public string[][] boardTwo;
+        GameViewModel game;
         public PlayerController()
         {
             
@@ -21,9 +20,12 @@ namespace Battleship.Controllers
         }
         public IActionResult CreateGame()
         {
-            boardOne = new Board(20, 20).board;
-            boardTwo = new Board(20, 20).board;
-            return View();
+            game = new GameViewModel()
+            {
+                Player1Board = new Board(20, 20),
+                Player2Board = new Board(20, 20)
+            };
+            return View(game);
         }
         public IActionResult PlaceShip()
         {
