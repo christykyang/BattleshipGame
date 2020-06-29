@@ -1,0 +1,44 @@
+﻿@model Battleship.Models.GameViewModel
+
+@{
+    ViewData["Title"] = "CreateGame";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CreateGame</h1>
+
+<h4>GameViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateGame">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Player1Id" class="control-label"></label>
+                <input asp-for="Player1Id" class="form-control" />
+                <span asp-validation-for="Player1Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Player2Id" class="control-label"></label>
+                <input asp-for="Player2Id" class="form-control" />
+                <span asp-validation-for="Player2Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
