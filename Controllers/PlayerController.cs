@@ -40,5 +40,23 @@ namespace Battleship.Controllers
             };
             return View(player);
         }
+        public void CreateFleet(string name, int size)
+        {
+            Ship destroyer = new Ship();
+            destroyer.Name = "Destroyer";
+            destroyer.Size = 2;
+
+            Ship submarine = new Ship();
+            submarine.Name = "Submarine";
+            submarine.Size = 3;
+
+            Ship battleship = new Ship();
+            battleship.Name = "Battleship";
+            battleship.Size = 4;
+
+            Ship aircraft = new Ship();
+            aircraft.Name = "Aircraft Carrier";
+            aircraft.Size = 5;
+        }
     }
 }
