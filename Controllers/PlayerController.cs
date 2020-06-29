@@ -25,7 +25,7 @@ namespace Battleship.Controllers
                 Player1Board = new Board(20, 20),
                 Player2Board = new Board(20, 20)
             };
-            return View(game);
+            return View();
         }
         public IActionResult PlaceShip()
         {
