@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Battleship.Data;
 using Battleship.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,10 @@ namespace Battleship.Controllers
     public class PlayerController : Controller
     {
         GameViewModel game;
-        public PlayerController()
+        ApplicationDbContext _context;
+        public PlayerController(ApplicationDbContext context)
         {
-            
+            _context = context;
         }
         public IActionResult Index()
         {
@@ -21,10 +23,15 @@ namespace Battleship.Controllers
         }
         public IActionResult CreateGame()
         {
+            string identityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int playerId = _context.Players.Where(p => p.IdentityUserId == identityUserId).FirstOrDefault().Id;
             game = new GameViewModel()
             {
+                Player1Id = playerId,
                 Player1Board = new Board(20, 20),
-                Player2Board = new Board(20, 20)
+                Player2Board = new Board(20, 20),
+                Player1Fleet = CreateFleet(),
+                Player2Fleet = CreateFleet()
             };
             return View(game);
         }
@@ -39,6 +46,14 @@ namespace Battleship.Controllers
                 IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier)
             };
             return View(player);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreatePlayer(Player player)
+        {
+            _context.Players.Add(player);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
         public List<Ship> CreateFleet()
         {
