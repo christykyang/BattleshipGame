@@ -40,23 +40,31 @@ namespace Battleship.Controllers
             };
             return View(player);
         }
-        public void CreateFleet(string name, int size)
+        public List<Ship> CreateFleet()
         {
+            List<Ship> fleet = new List<Ship>();
+
             Ship destroyer = new Ship();
             destroyer.Name = "Destroyer";
             destroyer.Size = 2;
+            fleet.Add(destroyer);
 
             Ship submarine = new Ship();
             submarine.Name = "Submarine";
             submarine.Size = 3;
+            fleet.Add(submarine);
 
             Ship battleship = new Ship();
             battleship.Name = "Battleship";
             battleship.Size = 4;
+            fleet.Add(battleship);
 
             Ship aircraft = new Ship();
             aircraft.Name = "Aircraft Carrier";
             aircraft.Size = 5;
+            fleet.Add(aircraft);
+
+            return fleet;
         }
     }
 }
