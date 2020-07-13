@@ -12,6 +12,8 @@ namespace Battleship.Models
         public int Id { get; set; }
         public int Player1Id { get; set; }
         public int Player2Id { get; set; }
+        public string Player1Fleet { get; set; }
+        public string Player2Fleet { get; set; }
         public string Player1Board { get; set; }
         public string Player2Board { get; set; }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Battleship.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,8 @@ namespace Battleship.Data
             : base(options)
         {
         }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Player> Players { get; set; }
+        public DbSet<Ship> Ships { get; set; }
     }
 }

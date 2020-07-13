@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200713163222_AddedHealtPropetyToShipModel.cs" />
+    <Compile Remove="Data\Migrations\20200713163222_AddedHealtPropetyToShipModel.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Models\NewFile.txt" />
   </ItemGroup>
 

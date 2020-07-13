@@ -8,6 +8,8 @@ namespace Battleship.Models
 {
     public class Board
     {
+        [Key]
+        public int Id { get; set; }
         public string[][] board;
         public Board()
         {
