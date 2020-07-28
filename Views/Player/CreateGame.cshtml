@@ -6,28 +6,33 @@
 }
 
 <h1>CreateGame</h1>
+<h1>
+    @Model.Id
+</h1>
 
 <h4>GameViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @*<ul>
+            @foreach(Player player in Model.AllPlayers)
+            {
+                <li>@player.Name</li>
+            }
+        </ul>*@
         <form asp-action="CreateGame">
+            <input hidden asp-for="Player1Id" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
                 <input asp-for="Id" class="form-control" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Player1Id" class="control-label"></label>
-                <input asp-for="Player1Id" class="form-control" />
-                <span asp-validation-for="Player1Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Player2Id" class="control-label"></label>
-                <input asp-for="Player2Id" class="form-control" />
+                <Select asp-for="Player2Id" asp-items='new SelectList(Model.AllPlayers, "IdentityUserId", "Name")' class="form-control" />
                 <span asp-validation-for="Player2Id" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

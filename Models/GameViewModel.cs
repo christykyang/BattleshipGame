@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,5 +15,6 @@ namespace Battleship.Models
         public List<Ship> Player2Fleet { get; set; }
         public Board Player1Board { get; set; }
         public Board Player2Board { get; set; }
+        public List<Player> AllPlayers { get; set; }
     }
 }

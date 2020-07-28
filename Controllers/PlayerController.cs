@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Battleship.Data;
 using Battleship.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Battleship.Controllers
 {
@@ -24,14 +25,16 @@ namespace Battleship.Controllers
         public IActionResult CreateGame()
         {
             string identityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            int playerId = _context.Players.Where(p => p.IdentityUserId == identityUserId).FirstOrDefault().Id;
+            Player player = _context.Players.Where(p => p.IdentityUserId == identityUserId).First();
+            List<Player> Players = _context.Players.ToList();
             game = new GameViewModel()
             {
-                Player1Id = playerId,
+                Player1Id = player.Id,
                 Player1Board = new Board(20, 20),
                 Player2Board = new Board(20, 20),
                 Player1Fleet = CreateFleet(),
-                Player2Fleet = CreateFleet()
+                Player2Fleet = CreateFleet(),
+                AllPlayers = Players
             };
             return View(game);
         }
