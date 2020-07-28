@@ -15,6 +15,6 @@ namespace Battleship.Models
         public List<Ship> Player2Fleet { get; set; }
         public Board Player1Board { get; set; }
         public Board Player2Board { get; set; }
-        public List<Player> AllPlayers { get; set; }
+        public SelectList AllPlayers { get; set; }
     }
 }

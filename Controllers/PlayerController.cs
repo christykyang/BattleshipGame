@@ -34,7 +34,7 @@ namespace Battleship.Controllers
                 Player2Board = new Board(20, 20),
                 Player1Fleet = CreateFleet(),
                 Player2Fleet = CreateFleet(),
-                AllPlayers = Players
+                AllPlayers = new SelectList(Players, "IdentityUserId", "Name")
             };
             return View(game);
         }
