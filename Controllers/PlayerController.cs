@@ -12,7 +12,7 @@ namespace Battleship.Controllers
 {
     public class PlayerController : Controller
     {
-        GameViewModel game;
+        GameViewModel game = new GameViewModel();
         ApplicationDbContext _context;
         public PlayerController(ApplicationDbContext context)
         {
@@ -36,19 +36,22 @@ namespace Battleship.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGame(GameViewModel newGame)
+        public void CreateGame(GameViewModel newGame)
         {
             newGame.Player1Board = new Board(20, 20);
             newGame.Player2Board = new Board(20, 20);
             newGame.Player1Fleet = CreateFleet();
             newGame.Player2Fleet = CreateFleet();
             game = newGame;
-            return RedirectToAction(nameof(Index));
+            PlaceShips();
         }
-        //public IActionResult PlaceShips()
-        //{
-
-        //}
+        public IActionResult PlaceShips()
+        {
+            PlaceShipsViewModel viewModel = new PlaceShipsViewModel();
+            viewModel.Board = game.Player1Board;
+            viewModel.Ships = CreateFleet();
+            return View(viewModel);
+        }
         public IActionResult PlaceShip()
         {
             return View();
