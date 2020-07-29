@@ -16,5 +16,6 @@ namespace Battleship.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Ship> Ships { get; set; }
+        public DbSet<Battleship.Models.PlaceShipsViewModel> PlaceShipsViewModel { get; set; }
     }
 }
