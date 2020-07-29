@@ -45,6 +45,10 @@ namespace Battleship.Controllers
             game = newGame;
             return RedirectToAction(nameof(Index));
         }
+        //public IActionResult PlaceShips()
+        //{
+
+        //}
         public IActionResult PlaceShip()
         {
             return View();
@@ -67,28 +71,13 @@ namespace Battleship.Controllers
         }
         public List<Ship> CreateFleet()
         {
-            List<Ship> fleet = new List<Ship>();
-
-            Ship destroyer = BuildShip("Destroyer", 2);
-            //destroyer.Name = "Destroyer";
-            //destroyer.Size = 2;
-            fleet.Add(destroyer);
-
-            Ship submarine = BuildShip("Submarine", 3);
-            //submarine.Name = "Submarine";
-            //submarine.Size = 3;
-            fleet.Add(submarine);
-
-            Ship battleship = BuildShip("Battleship", 4);
-            //battleship.Name = "Battleship";
-            //battleship.Size = 4;
-            fleet.Add(battleship);
-
-            Ship aircraft = BuildShip("Aircraft Carrier", 5);
-            //aircraft.Name = "Aircraft Carrier";
-            //aircraft.Size = 5;
-            fleet.Add(aircraft);
-
+            List<Ship> fleet = new List<Ship>() 
+            {
+                BuildShip("Destroyer", 2),
+                BuildShip("Submarine", 3),
+                BuildShip("Battleship", 4),
+                BuildShip("Aircraft Carrier", 5)
+            };
             return fleet;
         }
         private Ship BuildShip(string name, int size)
