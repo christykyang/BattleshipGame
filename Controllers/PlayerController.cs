@@ -30,13 +30,20 @@ namespace Battleship.Controllers
             game = new GameViewModel()
             {
                 Player1Id = player.Id,
-                Player1Board = new Board(20, 20),
-                Player2Board = new Board(20, 20),
-                Player1Fleet = CreateFleet(),
-                Player2Fleet = CreateFleet(),
                 AllPlayers = new SelectList(Players, "IdentityUserId", "Name")
             };
             return View(game);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateGame(GameViewModel newGame)
+        {
+            newGame.Player1Board = new Board(20, 20);
+            newGame.Player2Board = new Board(20, 20);
+            newGame.Player1Fleet = CreateFleet();
+            newGame.Player2Fleet = CreateFleet();
+            game = newGame;
+            return RedirectToAction(nameof(Index));
         }
         public IActionResult PlaceShip()
         {
@@ -62,27 +69,37 @@ namespace Battleship.Controllers
         {
             List<Ship> fleet = new List<Ship>();
 
-            Ship destroyer = new Ship();
-            destroyer.Name = "Destroyer";
-            destroyer.Size = 2;
+            Ship destroyer = BuildShip("Destroyer", 2);
+            //destroyer.Name = "Destroyer";
+            //destroyer.Size = 2;
             fleet.Add(destroyer);
 
-            Ship submarine = new Ship();
-            submarine.Name = "Submarine";
-            submarine.Size = 3;
+            Ship submarine = BuildShip("Submarine", 3);
+            //submarine.Name = "Submarine";
+            //submarine.Size = 3;
             fleet.Add(submarine);
 
-            Ship battleship = new Ship();
-            battleship.Name = "Battleship";
-            battleship.Size = 4;
+            Ship battleship = BuildShip("Battleship", 4);
+            //battleship.Name = "Battleship";
+            //battleship.Size = 4;
             fleet.Add(battleship);
 
-            Ship aircraft = new Ship();
-            aircraft.Name = "Aircraft Carrier";
-            aircraft.Size = 5;
+            Ship aircraft = BuildShip("Aircraft Carrier", 5);
+            //aircraft.Name = "Aircraft Carrier";
+            //aircraft.Size = 5;
             fleet.Add(aircraft);
 
             return fleet;
+        }
+        private Ship BuildShip(string name, int size)
+        {
+            Ship ship = new Ship()
+            {
+                Name = name,
+                Size = size,
+                Health = size
+            };
+            return ship;
         }
     }
 }
