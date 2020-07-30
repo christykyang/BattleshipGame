@@ -49,7 +49,8 @@ namespace Battleship.Controllers
         }
         public IActionResult PlaceShips()
         {
-            //var game = TempData["game"];
+            Game game = _context.Games.First();
+            GameViewModel gameViewModel = ConvertGameToGameViewModel(game);
             PlaceShipsViewModel viewModel = new PlaceShipsViewModel();
             //viewModel.Board = game.Player1Board;
             viewModel.Ships = CreateFleet();
@@ -107,6 +108,30 @@ namespace Battleship.Controllers
                 Player2Board = EncodeBoard(viewModel.Player2Board)
             };
             return game;
+        }
+        private GameViewModel ConvertGameToGameViewModel(Game game)
+        {
+            GameViewModel viewModel = new GameViewModel()
+            {
+                Id = game.Id,
+                Player1Id = game.Player1Id,
+                Player2Id = game.Player2Id,
+                Player1Board = DecodeBoard(game.Player1Board),
+                Player2Board = DecodeBoard(game.Player2Board)
+            };
+            viewModel.Player1Fleet = GetFleetBasedOnBoard(viewModel.Player1Board);
+            viewModel.Player2Fleet = GetFleetBasedOnBoard(viewModel.Player2Board);
+            return viewModel;
+        }
+        private List<Ship> GetFleetBasedOnBoard(Board board)
+        {
+            List<Ship> fleet = CreateFleet();
+            foreach(Ship ship in fleet)
+            {
+                string hit = ship.Name[0].ToString().ToLower();
+                ship.Health = ship.Size - GetCountOfParticularCharInBoard(hit, board);
+            }
+            return fleet;
         }
         private string EncodeBoard(Board board)
         {
