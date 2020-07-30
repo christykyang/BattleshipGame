@@ -20,9 +20,6 @@ namespace Battleship.Controllers
         }
         public IActionResult Index()
         {
-            Board board = new Board();
-            string boardString = EncodeBoard(board);
-            Board decodedBoard = DecodeBoard(boardString);
             return View();
         }
         public IActionResult CreateGame()
@@ -45,12 +42,7 @@ namespace Battleship.Controllers
             newGame.Player2Board = new Board(20, 20);
             newGame.Player1Fleet = CreateFleet();
             newGame.Player2Fleet = CreateFleet();
-            RouteValues routeValues = new RouteValues()
-            {
-                game = JsonConvert.SerializeObject(newGame)
-            };
-            Object gameObject = JsonConvert.SerializeObject(newGame);
-            TempData["game"] = gameObject;
+            
             return RedirectToAction(nameof(PlaceShips), routeValues);
         }
         public IActionResult PlaceShips(string game)
@@ -101,6 +93,18 @@ namespace Battleship.Controllers
                 Health = size
             };
             return ship;
+        }
+        private Game ConvertGameViewModelToGame(GameViewModel viewModel)
+        {
+            Game game = new Game()
+            {
+                Id = viewModel.Id,
+                Player1Id = viewModel.Player1Id,
+                Player2Id = viewModel.Player2Id,
+                Player1Board = EncodeBoard(viewModel.Player1Board),
+                Player2Board = EncodeBoard(viewModel.Player2Board)
+            };
+            return game;
         }
         private string EncodeBoard(Board board)
         {
