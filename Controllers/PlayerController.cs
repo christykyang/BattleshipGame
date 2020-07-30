@@ -20,6 +20,9 @@ namespace Battleship.Controllers
         }
         public IActionResult Index()
         {
+            Board board = new Board();
+            string boardString = EncodeBoard(board);
+            Board decodedBoard = DecodeBoard(boardString);
             return View();
         }
         public IActionResult CreateGame()
@@ -124,6 +127,20 @@ namespace Battleship.Controllers
             }
 
             return boardString;
+        }
+        private Board DecodeBoard (string boardString)
+        {
+            Board board = new Board();
+            string[] rows = boardString.Split(",,");
+            List<string[]> boardList = new List<string[]>();
+            foreach(string row in rows)
+            {
+                string[] cells = row.Split(",");
+                boardList.Add(cells);
+            }
+            string[][] boardArray = boardList.ToArray();
+            board.board = boardArray;
+            return board;
         }
     }
 }
