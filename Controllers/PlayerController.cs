@@ -42,10 +42,12 @@ namespace Battleship.Controllers
             newGame.Player2Board = new Board(20, 20);
             newGame.Player1Fleet = CreateFleet();
             newGame.Player2Fleet = CreateFleet();
-            
-            return RedirectToAction(nameof(PlaceShips), routeValues);
+            Game game = ConvertGameViewModelToGame(newGame);
+            _context.Games.Add(game);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(PlaceShips));
         }
-        public IActionResult PlaceShips(string game)
+        public IActionResult PlaceShips()
         {
             //var game = TempData["game"];
             PlaceShipsViewModel viewModel = new PlaceShipsViewModel();
