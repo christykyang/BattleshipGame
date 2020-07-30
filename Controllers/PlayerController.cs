@@ -148,5 +148,21 @@ namespace Battleship.Controllers
             board.board = boardArray;
             return board;
         }
+        private int GetCountOfParticularCharInBoard(string character, Board board)
+        {
+            int count = 0;
+            string[][] boardArray = board.board;
+            foreach(string[] row in boardArray)
+            {
+                foreach(string cell in row)
+                {
+                    if (cell == character)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
     }
 }
