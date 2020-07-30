@@ -7,12 +7,12 @@ using Battleship.Data;
 using Battleship.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace Battleship.Controllers
 {
     public class PlayerController : Controller
     {
-        GameViewModel game = new GameViewModel();
         ApplicationDbContext _context;
         public PlayerController(ApplicationDbContext context)
         {
@@ -27,7 +27,7 @@ namespace Battleship.Controllers
             string identityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Player player = _context.Players.Where(p => p.IdentityUserId == identityUserId).First();
             List<Player> Players = _context.Players.ToList();
-            game = new GameViewModel()
+            GameViewModel game = new GameViewModel()
             {
                 Player1Id = player.Id,
                 AllPlayers = new SelectList(Players, "IdentityUserId", "Name")
@@ -36,21 +36,27 @@ namespace Battleship.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public void CreateGame(GameViewModel newGame)
+        public IActionResult CreateGame(GameViewModel newGame)
         {
             newGame.Player1Board = new Board(20, 20);
             newGame.Player2Board = new Board(20, 20);
             newGame.Player1Fleet = CreateFleet();
             newGame.Player2Fleet = CreateFleet();
-            game = newGame;
-            PlaceShips();
+            RouteValues routeValues = new RouteValues()
+            {
+                game = JsonConvert.SerializeObject(newGame)
+            };
+            Object gameObject = JsonConvert.SerializeObject(newGame);
+            TempData["game"] = gameObject;
+            return RedirectToAction(nameof(PlaceShips), routeValues);
         }
-        public IActionResult PlaceShips()
+        public IActionResult PlaceShips(string game)
         {
+            //var game = TempData["game"];
             PlaceShipsViewModel viewModel = new PlaceShipsViewModel();
-            viewModel.Board = game.Player1Board;
+            //viewModel.Board = game.Player1Board;
             viewModel.Ships = CreateFleet();
-            return View(viewModel);
+            return View("PlaceShips", viewModel);
         }
         public IActionResult PlaceShip()
         {
@@ -92,6 +98,32 @@ namespace Battleship.Controllers
                 Health = size
             };
             return ship;
+        }
+        private string EncodeBoard(Board board)
+        {
+            string boardString = "";
+            string[][] boardArray = board.board;
+            for(int i = 0; i < boardArray.Length; i++)
+            {
+                string[] row = boardArray[i];
+                string rowString = "";
+                for(int j = 0; j < row.Length; j++)
+                {
+                    string cell = row[j];
+                    if (j != 0)
+                    {
+                        rowString += ",";
+                    }
+                    rowString += cell;
+                }
+                if (i != 0)
+                {
+                    boardString += ",,";
+                }
+                boardString += rowString;
+            }
+
+            return boardString;
         }
     }
 }
