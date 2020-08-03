@@ -9,14 +9,44 @@
 
 <h4>PlaceShipsViewModel</h4>
 <hr />
-<div class="game-board">
-    @foreach(string[] row in Model.Board.board)
-    {
-        <h1>row.Length</h1>
-    }
+<div class="row">
+    <div class="col-lg-8">
+        <form asp-action="PlaceShips">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="PlayerNumber" />
+            <table>
+                @for (int i = 0; i < Model.Board.board.Length; i++)
+                {
+                    <tr>
+                        @for (int j = 0; j < Model.Board.board[i].Length; j++)
+                        {
+                            <td class="board-square"></td>
+                        }
+                    </tr>
+                }
+            </table>
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-4">
+        @foreach(Ship ship in Model.Ships)
+        {
+            <button onclick="selectShip(@ship.Size)">@ship.Name - @ship.Size</button>
+        }
+    </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script>
+    var shipLength;
+    function selectShip(length) {
+        shipLength = length;
+    }
+</script>

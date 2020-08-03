@@ -8,6 +8,7 @@ namespace Battleship.Models
     public class PlaceShipsViewModel
     {
         public int Id { get; set; }
+        public int PlayerNumber { get; set; }
         public Board Board { get; set; }
         public List<Ship> Ships { get; set; }
     }

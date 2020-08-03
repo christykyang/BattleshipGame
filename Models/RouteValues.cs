@@ -8,5 +8,6 @@ namespace Battleship.Models
     public class RouteValues
     {
         public string game { get; set; }
+        public int playerNumber { get; set; }
     }
 }

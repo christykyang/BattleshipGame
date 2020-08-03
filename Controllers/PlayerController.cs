@@ -45,16 +45,48 @@ namespace Battleship.Controllers
             Game game = ConvertGameViewModelToGame(newGame);
             _context.Games.Add(game);
             _context.SaveChanges();
-            return RedirectToAction(nameof(PlaceShips));
+            RouteValues routeValues = new RouteValues()
+            {
+                playerNumber = 1
+            };
+            return RedirectToAction(nameof(PlaceShips), routeValues);
         }
-        public IActionResult PlaceShips()
+        public IActionResult PlaceShips(int playerNumber)
         {
             Game game = _context.Games.First();
             GameViewModel gameViewModel = ConvertGameToGameViewModel(game);
-            PlaceShipsViewModel viewModel = new PlaceShipsViewModel();
-            //viewModel.Board = game.Player1Board;
-            viewModel.Ships = CreateFleet();
-            return View("PlaceShips", viewModel);
+            PlaceShipsViewModel viewModel = new PlaceShipsViewModel() 
+            {
+                PlayerNumber = playerNumber,
+                Board = gameViewModel.Player1Board,
+                Ships = CreateFleet()
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult PlaceShips(PlaceShipsViewModel viewModel)
+        {
+            Game game = _context.Games.First();
+            if(viewModel.PlayerNumber == 1)
+            {
+                game.Player1Board = EncodeBoard(viewModel.Board);
+            }
+            else
+            {
+                game.Player2Board = EncodeBoard(viewModel.Board);
+            }
+            _context.Games.Update(game);
+            _context.SaveChanges();
+            viewModel.Ships = GetFleetBasedOnBoard(viewModel.Board);
+            if (viewModel.Ships.Count > 0)
+            {
+                return View(nameof(PlaceShips), viewModel);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
         public IActionResult PlaceShip()
         {
