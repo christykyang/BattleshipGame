@@ -26,14 +26,15 @@
                     </tr>
                 }
             </table>
-            
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        <button onclick="rotate()">Rotate Ship</button>
     </div>
     <div class="col-lg-4">
-        @foreach(Ship ship in Model.Ships)
+        @foreach (Ship ship in Model.Ships)
         {
             <button id="@ship.Name" draggable="true" ondragstart="dragStart(event)" display="inline" onclick="selectShip(@ship.Size)">@ship.Name - @ship.Size</button>
         }
@@ -47,22 +48,33 @@
 <script>
     var shipLength;
     var vertical = true;
+    let boardWidth = @Model.Board.board[0].Length;
+    let boardHeight = @Model.Board.board.Length;
+    
     function selectShip(length) {
         shipLength = length;
     }
     function hover(y, x) {
         let squares = document.getElementsByClassName("board-square");
+        let shipStartX = x;
+        let shipStartY = y;
         resetColorOfSquares(squares);
+        if (shipStartY >= boardHeight - shipLength && vertical) {
+            shipStartY = boardHeight - shipLength;
+        }
+        if (shipStartX >= boardWidth - shipLength && !vertical) {
+            shipStartX = boardWidth - shipLength;
+        }
         for (let i = 0; i < shipLength; i++) {
-            let id = getSquareId(y, x);
+            let id = getSquareId(shipStartY, shipStartX);
             console.log(id);
             let element = document.getElementById(id);
             element.style.backgroundColor = "grey";
             if (vertical) {
-                y++;
+                shipStartY++;
             }
             else {
-                x++;
+                shipStartX++;
             }
         }
     }
@@ -81,5 +93,8 @@
     function resetColorOfSquares(squares) {
         let squaresArray = [...squares];
         squaresArray.forEach(square => square.style.backgroundColor = "white");
+    }
+    function rotate() {
+        vertical = !vertical;
     }
 </script>
