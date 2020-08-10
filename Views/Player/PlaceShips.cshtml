@@ -21,7 +21,7 @@
                     <tr>
                         @for (int j = 0; j < Model.Board.board[i].Length; j++)
                         {
-                            <td class="board-square"></td>
+                            <td onmouseover="hover(@i, @j)" id="square-@i-@j" class="board-square droptarget"></td>
                         }
                     </tr>
                 }
@@ -35,7 +35,7 @@
     <div class="col-lg-4">
         @foreach(Ship ship in Model.Ships)
         {
-            <button onclick="selectShip(@ship.Size)">@ship.Name - @ship.Size</button>
+            <button id="@ship.Name" draggable="true" ondragstart="dragStart(event)" display="inline" onclick="selectShip(@ship.Size)">@ship.Name - @ship.Size</button>
         }
     </div>
 </div>
@@ -46,7 +46,40 @@
 
 <script>
     var shipLength;
+    var vertical = true;
     function selectShip(length) {
         shipLength = length;
+    }
+    function hover(y, x) {
+        let squares = document.getElementsByClassName("board-square");
+        resetColorOfSquares(squares);
+        for (let i = 0; i < shipLength; i++) {
+            let id = getSquareId(y, x);
+            console.log(id);
+            let element = document.getElementById(id);
+            element.style.backgroundColor = "grey";
+            if (vertical) {
+                y++;
+            }
+            else {
+                x++;
+            }
+        }
+    }
+    function dragStart(evt) {
+        hideShip(evt.target.attributes.id);
+        console.log(evt.target.attributes.id);
+        console.log(evt);
+    }
+    function hideShip(id) {
+        let ship = document.getElementById(id);
+        ship.style.display = "none";
+    }
+    function getSquareId(y, x) {
+        return "square-" + y + "-" + x;
+    }
+    function resetColorOfSquares(squares) {
+        let squaresArray = [...squares];
+        squaresArray.forEach(square => square.style.backgroundColor = "white");
     }
 </script>
